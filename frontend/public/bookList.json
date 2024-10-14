@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "book_name": "Story Book",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+    "category": "Free"
+  },
+  {
+    "id": 2,
+    "book_name": "Novel Book",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+    "category": "Free"
+  },
+  {
+    "id": 3,
+    "book_name": "Course Book",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+    "category": "Free"
+  },
+  {
+    "id": 4,
+    "book_name": "Spiritual Book",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+    "category": "Free"
+  },
+  {
+    "id": 5,
+    "book_name": "Biography Book",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+    "category": "Free"
+  },
+  {
+    "id": 6,
+    "name": "Competitive Book",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ",
+    "category": "Free"
+  }
+]
