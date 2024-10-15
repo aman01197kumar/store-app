@@ -5,7 +5,6 @@ const NavBar = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [showModal, setShowModal] = useState(false);
 
-  // Apply the theme on component mount and when 'theme' changes.
   useEffect(() => {
     const element = document.documentElement;
 
@@ -17,7 +16,7 @@ const NavBar = () => {
       document.body.classList.remove("dark");
     }
 
-    // Store the theme in localStorage whenever it changes.
+    
     localStorage.setItem("theme", theme);
   }, [theme]);
   const navContent = (

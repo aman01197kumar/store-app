@@ -1,24 +1,61 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUpPage = () => {
+  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate()
+  const isError = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Validate userName, email, and password
+    if (
+      userName.length < 5 ||
+      !emailRegex.test(email) ||
+      password.length < 10
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  // Register User function
+  const registerUser = async () => {
+    if (isError()) {
+      // toast.error("Please check the details");
+      return;
+    }
+
+    try {
+      const userSignUp = {
+        username: userName,
+        email: email,
+        password: password,
+      };
+
+      // Send POST request to the backend
+      const response = await axios.post(
+        "http://localhost:4001/user/signup", // API URL
+        userSignUp
+      );
+      if (response?.data?.status === 0) toast.warn(response?.data?.message);
+      else if (response?.data?.status === 200)
+        toast.success(response?.data?.message);
+      else if (response?.data?.status === 500)
+        toast.error(response?.data?.message);
+    } catch (err) {
+      console.log(err);
+      toast.error('Something went wrong')
+    }
+  };
+
   return (
-    <div>
-      <label className="input input-bordered flex items-center gap-2">
-        <input type="text" className="grow" placeholder="Search" />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="h-4 w-4 opacity-70"
-        >
-          <path
-            fillRule="evenodd"
-            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </label>
-      <label className="input input-bordered flex items-center gap-2">
+    <div className="space-y-5 m-10">
+      <h3 className="font-bold text-lg text-center">Sign up</h3>
+      <label className="input input-bordered flex items-center gap-2 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
@@ -28,7 +65,12 @@ const SignUpPage = () => {
           <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
           <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
         </svg>
-        <input type="text" className="grow" placeholder="Email" />
+        <input
+          type="text"
+          className="grow"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </label>
       <label className="input input-bordered flex items-center gap-2">
         <svg
@@ -39,7 +81,12 @@ const SignUpPage = () => {
         >
           <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
         </svg>
-        <input type="text" className="grow" placeholder="Username" />
+        <input
+          type="text"
+          className="grow"
+          placeholder="Username"
+          onChange={(e) => setUserName(e.target.value)}
+        />
       </label>
       <label className="input input-bordered flex items-center gap-2">
         <svg
@@ -54,8 +101,21 @@ const SignUpPage = () => {
             clipRule="evenodd"
           />
         </svg>
-        <input type="password" className="grow" value="password" />
+        <input
+          type="password"
+          className="grow"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
       </label>
+
+      <div className="flex justify-end space-x-5">
+        <button className="btn btn-success text-white" onClick={registerUser}>
+          Register
+        </button>
+        <button className="btn btn-secondary" onClick={()=>navigate('/')}>Go Back</button>
+      </div>
+      <ToastContainer position="top-center"/>
     </div>
   );
 };

@@ -1,8 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Modal = ({ showModal, setShowModal }) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
   const modalRef = useRef(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (showModal) {
       modalRef.current.showModal(); // Open the modal when showModal is true
@@ -11,6 +16,27 @@ const Modal = ({ showModal, setShowModal }) => {
     }
   }, [showModal]);
 
+  const loginHandler = async () => {
+    try {
+      const userLogin = {
+        email: userEmail,
+        password: userPassword,
+      };
+
+      const response = await axios.post(
+        "http://localhost:4001/user/login/",
+        userLogin
+      );
+      if (response?.data?.status === 200)
+        toast.success(response?.data?.message);
+      else if (response?.data?.status === 400)
+        toast.success(response?.data?.message);
+      else if (response?.data?.status === 401)
+        toast.success(response?.data?.message);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <dialog ref={modalRef} id="my_modal_2" className="modal">
       <div className="modal-box space-y-5">
@@ -34,7 +60,13 @@ const Modal = ({ showModal, setShowModal }) => {
             <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
             <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
           </svg>
-          <input type="text" className="grow" placeholder="Email" />
+          <input
+            type="text"
+            className="grow"
+            placeholder="Email"
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+          />
         </label>
         <label className="input input-bordered flex items-center gap-2">
           <svg
@@ -49,13 +81,26 @@ const Modal = ({ showModal, setShowModal }) => {
               clipRule="evenodd"
             />
           </svg>
-          <input type="password" className="grow" value="password" />
+          <input
+            type="password"
+            className="grow"
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}
+          />
         </label>
         <div className="flex justify-end space-x-5">
-          <button className="btn btn-secondary">Login</button>
-          <button className="btn btn-warning text-white">Sign Up</button>
+          <button className="btn btn-secondary" onClick={loginHandler}>
+            Login
+          </button>
+          <button
+            className="btn btn-warning text-white"
+            onClick={() => navigate("signup")}
+          >
+            Sign Up
+          </button>
         </div>
       </div>
+      <ToastContainer position="top-center" />
     </dialog>
   );
 };
